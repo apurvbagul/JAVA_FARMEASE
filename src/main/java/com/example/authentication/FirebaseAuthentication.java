@@ -5,12 +5,12 @@ import okhttp3.*;
 import org.json.JSONObject;
 
 public class FirebaseAuthentication {
-    private static final String API_KEY = "AIzaSyDwcdlNaZXSo450KtA9lJeGLgOiQGsAA8k";
+    private static final String API_KEY = "AIzaSyDnSwYqLG30WEZT8DQxG7-4N8a1pLA9kJY";
     private static final OkHttpClient client = new OkHttpClient();
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static String userUid;
-    
-    //SIGN-UP USED FOR THE AUTHENTICATION FOR USER
+
+    // SIGN-UP USED FOR THE AUTHENTICATION FOR USER
     public static String signUp(String email, String password) throws IOException {
         String url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + API_KEY;
         JSONObject json = new JSONObject();
@@ -21,7 +21,7 @@ public class FirebaseAuthentication {
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
-                .build();    
+                .build();
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 System.out.println("already have an account");
@@ -34,7 +34,7 @@ public class FirebaseAuthentication {
         }
     }
 
-    //SIGN-IP USED FOR THE AUTHENTICATION FOR USER
+    // SIGN-IP USED FOR THE AUTHENTICATION FOR USER
     public static String signIn(String email, String password) throws IOException {
         String url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + API_KEY;
         JSONObject json = new JSONObject();
@@ -57,7 +57,7 @@ public class FirebaseAuthentication {
         }
     }
 
-    public static String getUserUid(){
+    public static String getUserUid() {
         return userUid;
     }
 }

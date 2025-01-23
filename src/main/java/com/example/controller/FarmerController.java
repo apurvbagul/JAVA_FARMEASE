@@ -38,9 +38,11 @@ public class FarmerController extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        System.out.println("show home page");
         this.primaryStage = primaryStage;
-        switch (viewType) {
+        switch (viewType != null ? viewType : "home") {
             case "home":
+                System.out.println("show home page");
                 showHomePage();
                 break;
             case "signup":
@@ -69,6 +71,7 @@ public class FarmerController extends Application {
     }
 
     private void showHomePage() {
+        System.out.println("apurv");
         farmerView = new FarmerView(viewType, this, primaryStage);
         Group homePageView = farmerView.getFarmerHomePage();
         Scene scene = new Scene(homePageView, 1800, 1000);
@@ -110,14 +113,19 @@ public class FarmerController extends Application {
         farmer.setFarmerEmailId(email);
         farmer.setFarmerPassword(password);
         System.out.println(email);
-        
+
         String idToken = FirebaseAuthentication.signIn(email, password);
         String loggedUserUid = FirebaseAuthentication.getUserUid(); // corrected variable name
+        System.out.println("farmer not null" + loggedUserUid);
+        System.out.println("farmer not null idtoken found" + idToken);
         if (idToken != null) {
             Farmer loginFarmer = farmerService.getFarmerById(loggedUserUid);
+            System.out.println("farmer not null loginfarmer  found" + loginFarmer);
+
             if (loginFarmer != null) {
+
                 showHomePage(); // Show the home page if farmer retrieval is successful
-                // imageViews = getAllProductImages();
+
                 return true; // Indicate that login was successful
             } else {
                 throw new Exception("Error while retrieving farmer from the database");
@@ -125,11 +133,9 @@ public class FarmerController extends Application {
         } else {
             throw new Exception("Firebase authentication failed");
         }
-        
+
         // products_added_to_farmer = FarmerController.getAllProducts();
     }
-
-
 
     public void handleLogout() throws Exception {
         loginSignupController.handleLogout();
@@ -137,57 +143,49 @@ public class FarmerController extends Application {
         farmerService = null;
         farmerView = null;
         loginSignupController.start(this.primaryStage);
-        
+
     }
 
-
-    public  Farmer getFarmer(String uid){
+    public Farmer getFarmer(String uid) {
         // System.out.println(uid);
-       Farmer farmer =  farmerService.getFarmerById(uid);
-       return farmer;
+        Farmer farmer = farmerService.getFarmerById(uid);
+        return farmer;
     }
 
-    public static void handleDltProduct(Product p,String id){
+    public static void handleDltProduct(Product p, String id) {
 
         // System.out.println(FirebaseAuthentication.getUserUid());
         // System.out.println(p.getProductId());
-        if(id != null)
-             productService.deleteProductForFarmer(FirebaseAuthentication.getUserUid(),id);
+        if (id != null)
+            productService.deleteProductForFarmer(FirebaseAuthentication.getUserUid(), id);
         else
-            productService.deleteProductForFarmer(FirebaseAuthentication.getUserUid(),p.getProductId());
+            productService.deleteProductForFarmer(FirebaseAuthentication.getUserUid(), p.getProductId());
 
         try {
-            ImagePicker.deleteImage(FirebaseAuthentication.getUserUid(), p.getProductTitle(),p.getProduct_img_Name() );
+            ImagePicker.deleteImage(FirebaseAuthentication.getUserUid(), p.getProductTitle(), p.getProduct_img_Name());
         } catch (IOException e) {
             System.out.println("error while deleting");
         }
     }
-    
 
-    
     public static String handleUploadProduct() {
-        Product p = AddProduct.addedProduct();   
-        String pid =  productService.createProductForFarmer(FirebaseAuthentication.getUserUid(), p);
+        Product p = AddProduct.addedProduct();
+        String pid = productService.createProductForFarmer(FirebaseAuthentication.getUserUid(), p);
         return pid;
     }
 
+    public static void handleUploadProfilePic(Farmer farmer) {
 
-
-    public static  void handleUploadProfilePic(Farmer farmer){
-
-        
         FarmerService.updateFarmer(farmer);
-        
+
     }
 
-
-
-    public   boolean handleFeedBackForm(FeedbackForm feedbackForm){
+    public boolean handleFeedBackForm(FeedbackForm feedbackForm) {
         boolean fdre = feedbackService.createFeedback(feedbackForm);
-        System.out.println("Controller "+ fdre);
-        if(fdre){
+        System.out.println("Controller " + fdre);
+        if (fdre) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

@@ -15,7 +15,7 @@ public class LoginSignupController extends Application {
     FarmerController farmerController;
     AdminController adminController;
     BusinessController manufacturerController;
- 
+
     // overide the start method
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -24,7 +24,7 @@ public class LoginSignupController extends Application {
         indexView = new Index();
         loginComboBox = indexView.getLoginComboBox();
         signComboBox = indexView.getSignupComboBox();
-// soham
+        // soham
         loginComboBox.setOnAction(event -> {
             String selectedLoginType = loginComboBox.getValue();
             handleLogin(selectedLoginType, "login");
@@ -45,8 +45,6 @@ public class LoginSignupController extends Application {
         this.primaryStage.show();
     }
 
-
-
     // handling LoginPages
     public void handleLogin(String loginType, String type) {
         switch (loginType) {
@@ -54,6 +52,7 @@ public class LoginSignupController extends Application {
                 launchAdminController(type);
                 break;
             case "Farmer":
+                System.out.println("demo");
                 launchFarmerController(type);
                 break;
             case "Business":
@@ -75,12 +74,12 @@ public class LoginSignupController extends Application {
                 break;
         }
     }
-    
-    public void handleLogout(){
+
+    public void handleLogout() {
         indexView = null;
     }
 
-    public void  navigateBack(Stage prstage){
+    public void navigateBack(Stage prstage) {
         try {
             start(prstage);
         } catch (Exception e) {
@@ -92,6 +91,7 @@ public class LoginSignupController extends Application {
     private void launchFarmerController(String type) {
         farmerController = new FarmerController(type);
         try {
+            System.out.println("farmerControler");
             farmerController.start(this.primaryStage);
         } catch (Exception e) {
             e.printStackTrace();
